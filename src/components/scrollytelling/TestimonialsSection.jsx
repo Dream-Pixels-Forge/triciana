@@ -1,7 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollySection } from './ScrollySection';
 import { StarIcon } from '../common/Icons';
 import { getRandomImages, PRODUCT_IMAGES } from '../../utils/images';
+
+gsap.registerPlugin(ScrollTrigger);
 
 /**
  * TestimonialCard Component

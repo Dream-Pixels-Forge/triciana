@@ -151,8 +151,8 @@ export function CollectionsCarousel({
       setCurrentCard(Math.min(Math.max(newIndex, 0), displayCollections.length - 1));
     };
 
-    carouselRef.current.addEventListener('scroll', handleScroll);
-    return () => carouselRef.current.removeEventListener('scroll', handleScroll);
+    carouselRef.current?.addEventListener('scroll', handleScroll);
+    return () => carouselRef.current?.removeEventListener('scroll', handleScroll);
   }, [reducedMotion, displayCollections.length]);
 
   return (
