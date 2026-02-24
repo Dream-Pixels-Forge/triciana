@@ -20,16 +20,27 @@
 - **Loading States**: Progress indicators and fallback images
 - **Reduced Motion**: Respects user accessibility preferences
 
-### 📖 Scrollytelling Experience
-Five immersive scroll-triggered sections:
+### 📖 Scrollytelling Experience (Award-Winning v2.0)
 
-| Section | Description | Animations |
-|---------|-------------|------------|
-| **Brand Story** | Founder journey and artistic philosophy | Parallax images, text reveals |
-| **Process** | Seed-to-bouquet journey (4 steps) | Card animations, progress indicators |
-| **Sustainability** | Environmental impact metrics | Animated counters, icon displays |
-| **Collections** | Product showcase gallery | Horizontal scroll, pinned sections |
-| **Testimonials** | Customer reviews | Staggered card reveals, star ratings |
+Five immersive scroll-triggered sections with **modern, award-winning enhancements**:
+
+| Section | Description | Advanced Features |
+|---------|-------------|-------------------|
+| **Brand Story** | Founder journey with parallax | Clip-reveal masks, quote styling, signature animation |
+| **Process** | Seed-to-bouquet journey | 3D card transforms, progress indicators, feature tags |
+| **Sustainability** | Environmental metrics | Glassmorphism cards, icon animations, glow effects |
+| **Collections** | Horizontal scroll gallery | Card scale/opacity transitions, keyboard nav, touch swipe |
+| **Testimonials** | Customer reviews | Staggered reveals, hover lift, trust indicators |
+
+**Animation Features:**
+- 🎨 8 animation presets (default, dramatic, snappy, elegant)
+- ✨ 10+ animation types (fade-up, clip-reveal, text-split, blur-in, etc.)
+- 📝 Text splitting (character/word reveals)
+- 🎭 Multi-layer parallax effects
+- ⌨️ Keyboard navigation (Arrow keys, Home, End)
+- 👆 Touch-friendly swipe gestures
+- 📊 Progress indicators with percentages
+- 💬 Section tooltips on navigation dots
 
 ### ♿ Accessibility (WCAG 2.2 AA)
 - SVG icon library (14 custom icons)
