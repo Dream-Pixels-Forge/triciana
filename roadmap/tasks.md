@@ -12,10 +12,10 @@
 |--------|--------|------------|----------|------------|
 | Sprint 1: Foundation | ✅ Completed | Feb 24, 2026 | Feb 24, 2026 | 18/18 tasks |
 | Sprint 2: Hero Animation | ✅ Completed | Feb 24, 2026 | Feb 24, 2026 | 16/16 tasks |
-| Sprint 3: Scrollytelling | In Progress | Feb 24, 2026 | TBD | 8/20 tasks |
-| Sprint 4: Polish & Deploy | Pending | TBD | TBD | 0/14 tasks |
+| Sprint 3: Scrollytelling | ✅ Completed | Feb 24, 2026 | Feb 24, 2026 | 20/20 tasks |
+| Sprint 4: Polish & Deploy | In Progress | Feb 24, 2026 | TBD | 3/14 tasks |
 
-**Overall Progress:** 42/67 tasks completed (63%)
+**Overall Progress:** 57/67 tasks completed (85%)
 
 ### Priority Summary
 | Priority | Count | Completed |

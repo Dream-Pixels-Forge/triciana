@@ -36,7 +36,7 @@ function App() {
             <a href="/" className="flex items-center space-x-2">
               <FlowerIcon className="w-8 h-8 text-primary-500" />
               <span className="font-display font-semibold text-xl text-neutral-900">
-                Dream Blooms
+                Triciana
               </span>
             </a>
 
@@ -138,7 +138,7 @@ function App() {
         <Section background="alternate">
           <Container>
             <div className="section-heading">
-              <h2>Why Choose Dream Blooms</h2>
+              <h2>Why Choose Triciana</h2>
               <p className="text-neutral-600">
                 We believe in quality, sustainability, and the transformative power of flowers.
               </p>
@@ -219,7 +219,7 @@ function App() {
               <div className="flex items-center space-x-2 mb-4">
                 <FlowerIcon className="w-8 h-8 text-primary-400" />
                 <span className="font-display font-semibold text-xl text-white">
-                  Dream Blooms
+                  Triciana
                 </span>
               </div>
               <p className="text-body-sm">
@@ -260,7 +260,7 @@ function App() {
 
           <div className="border-t border-neutral-800 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-body-sm">
-              © 2026 Dream Blooms. All rights reserved.
+              © 2026 Triciana. All rights reserved.
             </p>
             <div className="flex items-center space-x-6 text-body-sm">
               <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>

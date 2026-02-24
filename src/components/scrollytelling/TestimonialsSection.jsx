@@ -21,7 +21,7 @@ export function TestimonialsSection({
     },
     {
       id: 2,
-      quote: "Dream Blooms made our wedding absolutely magical. Every arrangement was more beautiful than we imagined.",
+      quote: "Triciana made our wedding absolutely magical. Every arrangement was more beautiful than we imagined.",
       author: 'Emily & James',
       role: 'Newlyweds',
       rating: 5,
