@@ -61,21 +61,31 @@ export function ScrollyContainer({
     if (reducedMotion) return;
 
     const ctx = gsap.context(() => {
-      sections.forEach((_, index) => {
-        ScrollTrigger.create({
-          trigger: `[data-section-index="${index}"]`,
-          start: 'top 60%',
-          end: 'bottom 60%',
-          onEnter: () => {
-            setActiveSection(index);
-            onSectionChange?.(index);
-          },
-          onEnterBack: () => {
-            setActiveSection(index);
-            onSectionChange?.(index);
-          },
-        });
-      });
+      // Use IntersectionObserver instead of data attributes
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const index = parseInt(entry.target.getAttribute('data-section-index') || '0', 10);
+              setActiveSection(index);
+              onSectionChange?.(index);
+            }
+          });
+        },
+        {
+          root: null,
+          rootMargin: '-20% 0px -20% 0px',
+          threshold: 0,
+        }
+      );
+
+      // Observe direct children with section role
+      const sectionElements = document.querySelectorAll('[data-section-index]');
+      sectionElements.forEach((el) => observer.observe(el));
+
+      return () => {
+        sectionElements.forEach((el) => observer.unobserve(el));
+      };
     });
 
     return () => ctx.revert();
