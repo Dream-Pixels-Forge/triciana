@@ -2,6 +2,14 @@ import React from 'react';
 import { Button, Container, Section } from './components/common';
 import AccessibilityControls from './components/common/AccessibilityControls';
 import { Hero } from './components/hero';
+import {
+  ScrollyContainer,
+  BrandStory,
+  ProcessSection,
+  SustainabilityMetrics,
+  CollectionsCarousel,
+  TestimonialsSection,
+} from './components/scrollytelling';
 
 /**
  * App Component
@@ -87,6 +95,43 @@ function App() {
           onPrimaryClick={() => console.log('Primary CTA clicked')}
           onSecondaryClick={() => console.log('Secondary CTA clicked')}
         />
+
+        {/* Scrollytelling Experience */}
+        <ScrollyContainer showProgress={true}>
+          <BrandStory
+            title="Our Story"
+            subtitle="From Seed to Bouquet"
+            description="Every arrangement tells a story. Our journey began in a small garden, where we discovered the transformative power of flowers. Today, we continue that tradition, handcrafting each bouquet with intention, care, and deep respect for nature's beauty."
+            founderQuote="Flowers speak the language of emotion. We listen, then create."
+            founderName="Maria Santos, Founder & Lead Florist"
+          />
+          
+          <ProcessSection
+            title="Our Process"
+            subtitle="From Garden to Your Home"
+          />
+          
+          <SustainabilityMetrics
+            title="Our Impact"
+            subtitle="Sustainability at Every Step"
+            metrics={[
+              { value: 95, suffix: '%', label: 'Locally Sourced', description: 'Flowers from local growers', icon: '🌱' },
+              { value: 100, suffix: '%', label: 'Foam-Free', description: 'No floral foam in arrangements', icon: '♻️' },
+              { value: 50, suffix: 'K', label: 'Plastic Saved', description: 'Packages delivered plastic-free', icon: '🌍' },
+              { value: 24, suffix: 'h', label: 'Carbon Neutral', description: 'Same-day delivery radius', icon: '🚚' },
+            ]}
+          />
+          
+          <CollectionsCarousel
+            title="Collections"
+            subtitle="Curated for Every Occasion"
+          />
+          
+          <TestimonialsSection
+            title="Testimonials"
+            subtitle="What Our Customers Say"
+          />
+        </ScrollyContainer>
 
         {/* Features Section Placeholder */}
         <Section background="alternate">
