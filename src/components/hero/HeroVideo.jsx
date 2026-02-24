@@ -75,25 +75,45 @@ export function HeroVideo({
     const video = videoRef.current;
     if (!video) return;
 
+    let isMounted = true;
+    let playPromise = null;
+
     // Force mute and inline playback for autoplay compatibility
     video.muted = true;
     video.playsInline = true;
     video.preload = 'auto';
-    
+
     // Ensure video is ready to play
     video.load();
 
-    // Attempt autoplay with multiple tries
+    // Attempt autoplay with proper cleanup
     const attemptPlay = async () => {
+      if (!isMounted) return;
+      
       try {
-        await video.play();
-        console.log('Video autoplay successful');
+        playPromise = video.play();
+        if (playPromise) {
+          await playPromise;
+          // Only log in development if needed
+          // console.log('Video autoplay successful');
+        }
       } catch (err) {
-        console.warn('Autoplay attempt prevented:', err.message);
+        // Browser blocked autoplay - this is expected behavior
         // Try again on user interaction
-        document.addEventListener('click', attemptPlay, { once: true });
-        document.addEventListener('touchstart', attemptPlay, { once: true });
-        document.addEventListener('scroll', attemptPlay, { once: true });
+        if (!isMounted) return;
+        
+        const handleUserInteraction = async () => {
+          if (!isMounted) return;
+          try {
+            await video.play();
+          } catch (e) {
+            // Ignore subsequent play errors
+          }
+        };
+
+        document.addEventListener('click', handleUserInteraction, { once: true });
+        document.addEventListener('touchstart', handleUserInteraction, { once: true });
+        document.addEventListener('scroll', handleUserInteraction, { once: true });
       }
     };
 
@@ -102,7 +122,11 @@ export function HeroVideo({
     }
 
     return () => {
-      if (video) {
+      isMounted = false;
+      if (playPromise && typeof playPromise.cancel === 'function') {
+        playPromise.cancel();
+      }
+      if (video && !reducedMotion) {
         video.pause();
       }
     };
@@ -111,15 +135,17 @@ export function HeroVideo({
   // Respect reduced motion preference
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
-    
+    if (!video || !isLoaded) return;
+
     if (reducedMotion) {
       video.pause();
       setIsPlaying(false);
       // Seek to start for static poster-like effect
       video.currentTime = 0;
-    } else if (autoplay && isLoaded) {
-      video.play().catch(() => {});
+    } else if (autoplay) {
+      video.play().catch(() => {
+        // Ignore play errors - browser will handle
+      });
     }
   }, [reducedMotion, autoplay, isLoaded]);
   
