@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, forwardRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
@@ -16,16 +16,22 @@ gsap.registerPlugin(ScrollTrigger);
  * - Parallax layers with different speeds
  * - Smooth pinning with scrubbing
  */
-export function ScrollySection({
-  children,
-  background = 'light',
-  backgroundImage,
-  className = '',
-  index = 0,
-  animationConfig = {},
-}) {
+export const ScrollySection = forwardRef(function ScrollySection(
+  {
+    children,
+    background = 'light',
+    backgroundImage,
+    className = '',
+    index = 0,
+    animationConfig = {},
+  },
+  ref
+) {
   const sectionRef = useRef(null);
   const reducedMotion = useReducedMotion();
+  
+  // Use provided ref or fallback to internal ref
+  const resolvedRef = ref || sectionRef;
 
   const {
     triggerStart = 'top 75%',
@@ -39,7 +45,7 @@ export function ScrollySection({
 
   // Setup advanced section animations
   useEffect(() => {
-    const section = sectionRef.current;
+    const section = resolvedRef.current;
     if (!section) return;
 
     if (reducedMotion) {
@@ -223,10 +229,10 @@ export function ScrollySection({
           },
         });
       });
-    }, sectionRef);
+    }, resolvedRef);
 
     return () => ctx.revert();
-  }, [reducedMotion, triggerStart, triggerEnd, pin, pinDuration, scrub, preset]);
+  }, [reducedMotion, triggerStart, triggerEnd, pin, pinDuration, scrub, preset, resolvedRef]);
 
   // Background variants with enhanced options
   const backgroundClasses = {
@@ -239,7 +245,7 @@ export function ScrollySection({
 
   return (
     <Section
-      ref={sectionRef}
+      ref={resolvedRef}
       data-section-index={index}
       className={`${backgroundClasses[background]} ${className}`}
       style={backgroundImage ? { backgroundImage: `url(${backgroundImage})` } : {}}
@@ -254,7 +260,7 @@ export function ScrollySection({
       </Container>
     </Section>
   );
-}
+});
 
 /**
  * Enhanced ScrollyMedia Component
