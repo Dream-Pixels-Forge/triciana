@@ -12,18 +12,28 @@ gsap.registerPlugin(ScrollTrigger);
 /**
  * Enhanced CollectionsCarousel Component
  *
- * Award-winning horizontal scroll gallery with:
- * - Smooth pinned horizontal scrolling
- * - Card scale and opacity transitions
- * - Progress indicator showing position
- * - Parallax image effects within cards
+ * Horizontal scroll gallery with:
+ * - Smooth card transitions
+ * - Progress indicator
  * - Touch-friendly swipe support
  * - Keyboard navigation
+ * - No pinning - regular scroll flow
  */
 export function CollectionsCarousel({
   title = 'Collections',
   subtitle = 'Curated for Every Occasion',
-  collections = [
+  collections,
+  ctaText = 'View All Collections',
+  onCtaClick,
+  className = '',
+}) {
+  const carouselRef = useRef(null);
+  const trackRef = useRef(null);
+  const reducedMotion = useReducedMotion();
+  const [currentCard, setCurrentCard] = useState(0);
+
+  // Use default collections if not provided
+  const defaultCollections = [
     {
       id: 1,
       name: 'Weddings',
@@ -84,149 +94,74 @@ export function CollectionsCarousel({
       accentColor: '#EC4899',
       features: ['Weekly Delivery', 'Bi-Weekly Options', 'Monthly Bouquets', 'Flexible Plans'],
     },
-  ],
-  ctaText = 'View All Collections',
-  onCtaClick,
-  className = '',
-}) {
-  const carouselRef = useRef(null);
-  const trackRef = useRef(null);
-  const cardsRef = useRef([]);
-  const reducedMotion = useReducedMotion();
-  const [currentCard, setCurrentCard] = useState(0);
-  const [totalScroll, setTotalScroll] = useState(0);
-  const [scrollProgress, setScrollProgress] = useState(0);
+  ];
 
-  // Horizontal scroll on vertical scroll with enhanced effects
+  const displayCollections = collections || defaultCollections;
+
+  // Animate cards on scroll
   useEffect(() => {
-    if (reducedMotion || !trackRef.current || !carouselRef.current) return;
+    if (reducedMotion || !trackRef.current) return;
 
     const ctx = gsap.context(() => {
-      const track = trackRef.current;
-      const carousel = carouselRef.current;
+      const cards = trackRef.current.children;
       
-      // Calculate total scroll distance
-      const scrollWidth = track.scrollWidth - window.innerWidth + 48; // Account for padding
-      setTotalScroll(scrollWidth);
-
-      // Create pinned horizontal scroll
-      const tween = gsap.to(track, {
-        x: () => -scrollWidth,
-        ease: 'none',
+      gsap.utils.toArray(cards).forEach((card, i) => {
+        gsap.fromTo(
+          card,
+          { opacity: 0, scale: 0.9, y: 50 },
+          {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: card,
+              start: 'top 85%',
+              toggleActions: 'play none none reverse',
+            },
+          }
+        );
       });
-
-      ScrollTrigger.create({
-        trigger: carousel,
-        start: 'top top',
-        end: () => `+=${scrollWidth}`,
-        pin: true,
-        pinSpacing: false,
-        animation: tween,
-        scrub: 1,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          const progress = self.progress;
-          setScrollProgress(progress);
-          
-          // Calculate current card
-          const cardCount = collections.length;
-          const cardWidth = 1 / cardCount;
-          const current = Math.min(
-            Math.floor(progress * cardCount + 0.5),
-            cardCount - 1
-          );
-          setCurrentCard(current);
-
-          // Animate cards based on position
-          cardsRef.current.forEach((card, index) => {
-            if (!card) return;
-            
-            const cardProgress = (progress - index * cardWidth) * cardCount;
-            const isActive = index === current;
-            const isInView = cardProgress > -0.3 && cardProgress < 1.3;
-
-            if (isInView) {
-              // Scale effect
-              const scale = isActive ? 1 : Math.max(0.85, 1 - Math.abs(cardProgress - 0.5) * 0.3);
-              // Opacity effect
-              const opacity = isActive ? 1 : Math.max(0.4, 1 - Math.abs(cardProgress - 0.5) * 1.2);
-              // Rotation effect
-              const rotation = isActive ? 0 : (cardProgress - 0.5) * 5;
-
-              gsap.to(card, {
-                scale,
-                opacity,
-                rotationY: rotation,
-                duration: 0.3,
-                ease: 'power2.out',
-              });
-            }
-          });
-        },
-      });
-
-      // Add smooth touch scrolling for mobile
-      if ('ontouchstart' in window) {
-        let startX;
-        let currentX;
-        let isDragging = false;
-
-        carousel.addEventListener('touchstart', (e) => {
-          startX = e.touches[0].clientX;
-          isDragging = true;
-        });
-
-        carousel.addEventListener('touchmove', (e) => {
-          if (!isDragging) return;
-          currentX = e.touches[0].clientX;
-          const diff = startX - currentX;
-          tween.progress(tween.progress() + diff / scrollWidth);
-          startX = currentX;
-        });
-
-        carousel.addEventListener('touchend', () => {
-          isDragging = false;
-        });
-      }
     }, carouselRef);
 
     return () => ctx.revert();
-  }, [reducedMotion, collections.length]);
+  }, [reducedMotion]);
 
-  // Keyboard navigation
+  // Scroll to card
+  const scrollToCard = (index) => {
+    if (!trackRef.current || !trackRef.current.children[index]) return;
+    
+    const card = trackRef.current.children[index];
+    card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    setCurrentCard(index);
+  };
+
+  // Handle scroll to update current card
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'ArrowRight') {
-        e.preventDefault();
-        const nextCard = Math.min(currentCard + 1, collections.length - 1);
-        scrollToCard(nextCard);
-      } else if (e.key === 'ArrowLeft') {
-        e.preventDefault();
-        const prevCard = Math.max(currentCard - 1, 0);
-        scrollToCard(prevCard);
-      }
+    if (reducedMotion || !carouselRef.current) return;
+
+    const handleScroll = () => {
+      const container = carouselRef.current;
+      if (!container) return;
+
+      const scrollLeft = container.scrollLeft;
+      const cardWidth = container.querySelector('[data-card-index]')?.offsetWidth || 0;
+      const newIndex = Math.round(scrollLeft / (cardWidth + 24)); // 24px is gap
+      setCurrentCard(Math.min(Math.max(newIndex, 0), displayCollections.length - 1));
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentCard, collections.length]);
-
-  const scrollToCard = (index) => {
-    const cardProgress = index / collections.length;
-    ScrollTrigger.getAll().forEach((trigger) => {
-      if (trigger.trigger === carouselRef.current) {
-        trigger.progress(cardProgress);
-      }
-    });
-  };
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, [reducedMotion, displayCollections.length]);
 
   return (
     <ScrollySection
       background="light"
       className={className}
       animationConfig={{
-        triggerStart: 'top top',
-        pin: false,
+        triggerStart: 'top 80%',
+        preset: 'elegant',
       }}
     >
       {/* Header */}
@@ -254,23 +189,25 @@ export function CollectionsCarousel({
       </div>
 
       {/* Horizontal Scroll Container */}
-      <div ref={carouselRef} className="relative overflow-hidden">
+      <div
+        ref={carouselRef}
+        className="relative overflow-x-auto overflow-y-hidden pb-8 -mx-4 px-4 lg:-mx-8 lg:px-8"
+        style={{ scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }}
+      >
         <div
           ref={trackRef}
-          className="flex gap-4 lg:gap-6 pl-6 lg:pl-12"
+          className="flex gap-6"
           style={{ width: 'max-content' }}
         >
-          {collections.map((collection, index) => (
+          {displayCollections.map((collection, index) => (
             <div
               key={collection.id}
-              ref={(el) => (cardsRef.current[index] = el)}
-              data-animate="scale"
-              data-delay={0.1 + index * 0.1}
-              className="flex-shrink-0 w-[85vw] md:w-[70vw] lg:w-[50vw] xl:w-[40vw] mr-6 lg:mr-12"
-              style={{ willChange: 'transform, opacity' }}
+              data-card-index={index}
+              className="flex-shrink-0 w-[85vw] md:w-[70vw] lg:w-[50vw] xl:w-[40vw] snap-center"
+              style={{ scrollSnapAlign: 'center' }}
             >
               {/* Collection Card */}
-              <div className="group relative h-[600px] lg:h-[700px] rounded-3xl overflow-hidden shadow-2xl transition-shadow duration-500">
+              <div className="group relative h-[500px] lg:h-[600px] rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500">
                 {/* Image Background */}
                 <div className="absolute inset-0">
                   <img
@@ -343,69 +280,51 @@ export function CollectionsCarousel({
 
       {/* Progress Indicator */}
       {!reducedMotion && (
-        <div className="flex items-center justify-center gap-3 mt-8">
-          <span className="text-body-sm text-neutral-500">
-            {currentCard + 1} of {collections.length}
-          </span>
-          <div className="w-32 h-1.5 bg-neutral-200 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-primary-500 transition-all duration-300"
-              style={{ width: `${((currentCard + 1) / collections.length) * 100}%` }}
-            />
-          </div>
-          <div className="flex gap-1">
-            <button
-              onClick={() => scrollToCard(Math.max(0, currentCard - 1))}
-              disabled={currentCard === 0}
-              className="p-2 rounded-full bg-neutral-100 hover:bg-neutral-200 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-              aria-label="Previous collection"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-            <button
-              onClick={() => scrollToCard(Math.min(collections.length - 1, currentCard + 1))}
-              disabled={currentCard === collections.length - 1}
-              className="p-2 rounded-full bg-neutral-100 hover:bg-neutral-200 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-              aria-label="Next collection"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Scroll Hint */}
-      {!reducedMotion && scrollProgress < 0.1 && (
-        <div
-          data-animate="fade-up"
-          data-delay="0.5"
-          className="flex items-center justify-center gap-3 mt-6 text-neutral-500"
-        >
-          <span className="text-body-sm">Scroll to explore</span>
-          <svg
-            className="w-5 h-5 animate-bounce"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+        <div className="flex items-center justify-center gap-3 mt-4">
+          <button
+            onClick={() => scrollToCard(Math.max(0, currentCard - 1))}
+            disabled={currentCard === 0}
+            className="p-2 rounded-full bg-neutral-100 hover:bg-neutral-200 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            aria-label="Previous collection"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M17 8l4 4m0 0l-4 4m4-4H3"
-            />
-          </svg>
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          
+          <div className="flex gap-2">
+            {displayCollections.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => scrollToCard(index)}
+                className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                  index === currentCard
+                    ? 'w-8 bg-primary-500'
+                    : 'bg-neutral-300 hover:bg-neutral-400'
+                }`}
+                aria-label={`Go to ${displayCollections[index].name}`}
+                aria-current={index === currentCard ? 'step' : undefined}
+              />
+            ))}
+          </div>
+
+          <button
+            onClick={() => scrollToCard(Math.min(displayCollections.length - 1, currentCard + 1))}
+            disabled={currentCard === displayCollections.length - 1}
+            className="p-2 rounded-full bg-neutral-100 hover:bg-neutral-200 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            aria-label="Next collection"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
         </div>
       )}
 
       {/* CTA */}
       <div
         data-animate="fade-up"
-        data-delay="0.6"
+        data-delay="0.3"
         className="text-center mt-12 lg:mt-16"
       >
         <Button
