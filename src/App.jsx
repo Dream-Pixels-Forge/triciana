@@ -1,12 +1,12 @@
 import React from 'react';
 import { Button, Container, Section } from './components/common';
 import AccessibilityControls from './components/common/AccessibilityControls';
+import { Hero } from './components/hero';
 
 /**
  * App Component
- * 
- * Main application component with placeholder sections.
- * TODO: Implement full hero and scrollytelling sections in Sprint 2-3
+ *
+ * Main application component with animated hero section.
  */
 function App() {
   return (
@@ -72,32 +72,21 @@ function App() {
 
       {/* Main Content */}
       <main id="main-content">
-        {/* Hero Section Placeholder */}
-        <Section className="min-h-screen flex items-center justify-center pt-20">
-          <Container>
-            <div className="text-center max-w-3xl mx-auto">
-              <span className="inline-block text-caption text-primary-500 font-medium tracking-wider uppercase mb-4">
-                Artisan Florist
-              </span>
-              <h1 className="text-display-lg md:text-display-xl mb-6">
-                Beautiful Flowers for{' '}
-                <span className="text-gradient">Life's Moments</span>
-              </h1>
-              <p className="text-body-lg text-neutral-600 mb-8 max-w-2xl mx-auto">
-                Handcrafted arrangements for weddings, special occasions, and everyday beauty. 
-                Locally sourced, sustainably grown, delivered with care.
-              </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Button variant="primary" size="lg">
-                  Explore Collections
-                </Button>
-                <Button variant="secondary" size="lg">
-                  Book Consultation
-                </Button>
-              </div>
-            </div>
-          </Container>
-        </Section>
+        {/* Hero Section with Animation */}
+        <Hero
+          headline="Beautiful Flowers for Life's Moments"
+          subheadline="Handcrafted arrangements for weddings, special occasions, and everyday beauty. Locally sourced, sustainably grown, delivered with care."
+          ctaPrimary="Explore Collections"
+          ctaSecondary="Book Consultation"
+          videoSrc="/videos/a5d0a42e-17c8-40c3-94b1-5d65e07ad80a.mp4"
+          posterSrc="/images/hero/startFrame.png"
+          // JPG Sequence configuration (uncomment to use)
+          // useJpgSequence={true}
+          // jpgFrames={[]} // Will auto-generate from /images/hero/sequence/
+          // jpgFps={30}
+          onPrimaryClick={() => console.log('Primary CTA clicked')}
+          onSecondaryClick={() => console.log('Secondary CTA clicked')}
+        />
 
         {/* Features Section Placeholder */}
         <Section background="alternate">
