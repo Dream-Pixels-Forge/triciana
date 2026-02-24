@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Container, Section } from './components/common';
 import AccessibilityControls from './components/common/AccessibilityControls';
 import { Hero } from './components/hero';
@@ -11,100 +11,62 @@ import {
   CollectionsCarousel,
   TestimonialsSection,
 } from './components/scrollytelling';
+import { CartProvider, useCart } from './context/CartContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { SignInModal } from './components/auth/SignInModal';
+import { SignUpModal } from './components/auth/SignUpModal';
+import { CartSlideOver } from './components/cart/CartSlideOver';
+import { Shop } from './pages/Shop';
 
-/**
- * App Component
- *
- * Main application component with animated hero section.
- */
-function App() {
+// Main App Content
+function AppContent() {
+  const { isSignInOpen, isSignUpOpen, setIsSignInOpen, setIsSignUpOpen, user, signOut } = useAuth();
+  const { cartCount, setIsCartOpen } = useCart();
+  const [currentPage, setCurrentPage] = useState('home');
+
+  if (currentPage === 'shop') {
+    return (
+      <div className="min-h-screen bg-neutral-50">
+        <Header
+          onNavigate={setCurrentPage}
+          onSignIn={() => setIsSignInOpen(true)}
+          onSignUp={() => setIsSignUpOpen(true)}
+          onCartClick={() => setIsCartOpen(true)}
+          cartCount={cartCount}
+          user={user}
+          onSignOut={signOut}
+        />
+        <Shop />
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-neutral-50">
-      {/* Skip Link */}
-      <a href="#main-content" className="skip-link">
-        Skip to main content
-      </a>
-
-      {/* Accessibility Controls */}
-      <AccessibilityControls />
-
-      {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-40 bg-white/80 backdrop-blur-md border-b border-neutral-100">
-        <Container>
-          <div className="flex items-center justify-between h-16 md:h-20">
-            {/* Logo */}
-            <a href="/" className="flex items-center space-x-2">
-              <FlowerIcon className="w-8 h-8 text-primary-500" />
-              <span className="font-display font-semibold text-xl text-neutral-900">
-                Triciana
-              </span>
-            </a>
-
-            {/* Navigation */}
-            <nav aria-label="Main navigation">
-              <ul className="hidden md:flex items-center space-x-8">
-                <li>
-                  <a href="#collections" className="text-body-sm text-neutral-600 hover:text-primary-500 transition-colors">
-                    Collections
-                  </a>
-                </li>
-                <li>
-                  <a href="#weddings" className="text-body-sm text-neutral-600 hover:text-primary-500 transition-colors">
-                    Weddings
-                  </a>
-                </li>
-                <li>
-                  <a href="#about" className="text-body-sm text-neutral-600 hover:text-primary-500 transition-colors">
-                    About
-                  </a>
-                </li>
-                <li>
-                  <a href="#contact" className="text-body-sm text-neutral-600 hover:text-primary-500 transition-colors">
-                    Contact
-                  </a>
-                </li>
-              </ul>
-            </nav>
-
-            {/* CTA */}
-            <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="sm" className="hidden sm:inline-flex">
-                Sign In
-              </Button>
-              <Button variant="primary" size="sm">
-                Shop Now
-              </Button>
-            </div>
-          </div>
-        </Container>
-      </header>
-
-      {/* Main Content */}
+      <Header
+        onNavigate={setCurrentPage}
+        onSignIn={() => setIsSignInOpen(true)}
+        onSignUp={() => setIsSignUpOpen(true)}
+        onCartClick={() => setIsCartOpen(true)}
+        cartCount={cartCount}
+        user={user}
+        onSignOut={signOut}
+      />
+      
       <main id="main-content">
-        {/* Hero Section with Animation */}
         <Hero
           headline="Beautiful Flowers for Life's Moments"
           subheadline="Handcrafted arrangements for weddings, special occasions, and everyday beauty. Locally sourced, sustainably grown, delivered with care."
           ctaPrimary="Explore Collections"
-          ctaSecondary="Book Consultation"
-          videoSrc="/videos/a5d0a42e-17c8-40c3-94b1-5d65e07ad80a.mp4"
-          posterSrc="/images/hero/startFrame.png"
-          // JPG Sequence configuration (uncomment to use)
-          // useJpgSequence={true}
-          // jpgFrames={[]} // Will auto-generate from /images/hero/sequence/
-          // jpgFps={30}
-          onPrimaryClick={() => console.log('Primary CTA clicked')}
-          onSecondaryClick={() => console.log('Secondary CTA clicked')}
+          ctaSecondary="Shop Now"
+          onSecondaryClick={() => setCurrentPage('shop')}
         />
 
-        {/* Scrollytelling Experience */}
         <ScrollyContainer showProgress={true}>
           <BrandStory
             title="Our Story"
             subtitle="From Seed to Bouquet"
-            description="Every arrangement tells a story. Our journey began in a small garden, where we discovered the transformative power of flowers. Today, we continue that tradition, handcrafting each bouquet with intention, care, and deep respect for nature's beauty."
-            founderQuote="Flowers speak the language of emotion. We listen, then create."
-            founderName="Maria Santos, Founder & Lead Florist"
           />
           
           <ProcessSection
@@ -134,7 +96,7 @@ function App() {
           />
         </ScrollyContainer>
 
-        {/* Features Section Placeholder */}
+        {/* Features Section */}
         <Section background="alternate">
           <Container>
             <div className="section-heading">
@@ -145,7 +107,6 @@ function App() {
             </div>
 
             <div className="grid md:grid-cols-3 gap-8">
-              {/* Feature 1 */}
               <div className="card p-6 text-center">
                 <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary-100 flex items-center justify-center text-primary-600">
                   <LeafIcon className="w-8 h-8" />
@@ -156,7 +117,6 @@ function App() {
                 </p>
               </div>
 
-              {/* Feature 2 */}
               <div className="card p-6 text-center">
                 <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary-100 flex items-center justify-center text-primary-600">
                   <HandIcon className="w-8 h-8" />
@@ -167,7 +127,6 @@ function App() {
                 </p>
               </div>
 
-              {/* Feature 3 */}
               <div className="card p-6 text-center">
                 <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary-100 flex items-center justify-center text-primary-600">
                   <TruckIcon className="w-8 h-8" />
@@ -180,97 +139,146 @@ function App() {
             </div>
           </Container>
         </Section>
-
-        {/* Collections Section Placeholder */}
-        <Section id="collections">
-          <Container>
-            <div className="section-heading">
-              <h2>Our Collections</h2>
-              <p className="text-neutral-600">
-                Discover arrangements for every occasion and style.
-              </p>
-            </div>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {['Weddings', 'Special Occasions', 'Everyday Beauty', 'Sympathy', 'Corporate', 'Subscriptions'].map((collection) => (
-                <a
-                  key={collection}
-                  href={`#/collections/${collection.toLowerCase().replace(' ', '-')}`}
-                  className="card group block overflow-hidden"
-                >
-                  <div className="aspect-[4/3] bg-neutral-100 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <span className="absolute bottom-4 left-4 text-white font-display font-semibold text-lg">
-                      {collection}
-                    </span>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </Container>
-        </Section>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-neutral-900 text-neutral-400 py-12">
-        <Container>
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <FlowerIcon className="w-8 h-8 text-primary-400" />
-                <span className="font-display font-semibold text-xl text-white">
-                  Triciana
-                </span>
-              </div>
-              <p className="text-body-sm">
-                Artisan florist creating beautiful moments with locally sourced, sustainably grown flowers.
-              </p>
-            </div>
+      <Footer />
 
-            <div>
-              <h4 className="text-heading-sm text-white mb-4">Shop</h4>
-              <ul className="space-y-2 text-body-sm">
-                <li><a href="#" className="hover:text-white transition-colors">All Collections</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Weddings</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Subscriptions</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Gift Cards</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="text-heading-sm text-white mb-4">Company</h4>
-              <ul className="space-y-2 text-body-sm">
-                <li><a href="#" className="hover:text-white transition-colors">About Us</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Sustainability</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Press</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="text-heading-sm text-white mb-4">Support</h4>
-              <ul className="space-y-2 text-body-sm">
-                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">FAQ</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Delivery Info</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Care Guide</a></li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-neutral-800 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-body-sm">
-              © 2026 Triciana. All rights reserved.
-            </p>
-            <div className="flex items-center space-x-6 text-body-sm">
-              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-              <a href="#" className="hover:text-white transition-colors">Accessibility</a>
-            </div>
-          </div>
-        </Container>
-      </footer>
+      {/* Modals */}
+      {isSignInOpen && <SignInModal onClose={() => setIsSignInOpen(false)} />}
+      {isSignUpOpen && <SignUpModal onClose={() => setIsSignUpOpen(false)} />}
+      <CartSlideOver />
     </div>
+  );
+}
+
+// Header Component
+function Header({ onNavigate, onSignIn, onSignUp, onCartClick, cartCount, user, onSignOut }) {
+  return (
+    <header className="fixed top-0 left-0 right-0 z-40 bg-white/80 backdrop-blur-md border-b border-neutral-100">
+      <Container>
+        <div className="flex items-center justify-between h-16 md:h-20">
+          <button onClick={() => onNavigate('home')} className="flex items-center space-x-2">
+            <FlowerIcon className="w-8 h-8 text-primary-500" />
+            <span className="font-display font-semibold text-xl text-neutral-900">Triciana</span>
+          </button>
+
+          <nav aria-label="Main navigation">
+            <ul className="hidden md:flex items-center space-x-8">
+              <li><button onClick={() => onNavigate('home')} className="text-body-sm text-neutral-600 hover:text-primary-500">Home</button></li>
+              <li><button onClick={() => onNavigate('shop')} className="text-body-sm text-neutral-600 hover:text-primary-500">Shop</button></li>
+              <li><a href="#weddings" className="text-body-sm text-neutral-600 hover:text-primary-500">Weddings</a></li>
+              <li><a href="#about" className="text-body-sm text-neutral-600 hover:text-primary-500">About</a></li>
+            </ul>
+          </nav>
+
+          <div className="flex items-center space-x-4">
+            <button onClick={onCartClick} className="relative p-2 text-neutral-600 hover:text-primary-500" aria-label="Shopping cart">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              </svg>
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
+            </button>
+
+            {user ? (
+              <div className="relative group">
+                <button className="flex items-center space-x-2 text-body-sm font-medium text-neutral-700 hover:text-primary-500">
+                  <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 font-semibold">
+                    {user.name[0].toUpperCase()}
+                  </div>
+                  <span className="hidden sm:inline">{user.name}</span>
+                </button>
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-neutral-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                  <div className="py-2">
+                    <a href="/account" className="block px-4 py-2 text-body-sm text-neutral-700 hover:bg-neutral-50">Account</a>
+                    <a href="/orders" className="block px-4 py-2 text-body-sm text-neutral-700 hover:bg-neutral-50">Orders</a>
+                    <button onClick={onSignOut} className="w-full text-left px-4 py-2 text-body-sm text-red-600 hover:bg-neutral-50">Sign Out</button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center space-x-3">
+                <button onClick={onSignIn} className="text-body-sm font-medium text-neutral-700 hover:text-primary-500">Sign In</button>
+                <Button variant="primary" size="sm" onClick={onSignUp}>Sign Up</Button>
+              </div>
+            )}
+          </div>
+        </div>
+      </Container>
+    </header>
+  );
+}
+
+// Footer Component
+function Footer() {
+  return (
+    <footer className="bg-neutral-900 text-neutral-400 py-12">
+      <Container>
+        <div className="grid md:grid-cols-4 gap-8">
+          <div>
+            <div className="flex items-center space-x-2 mb-4">
+              <FlowerIcon className="w-8 h-8 text-primary-400" />
+              <span className="font-display font-semibold text-xl text-white">Triciana</span>
+            </div>
+            <p className="text-body-sm">Artisan florist creating beautiful moments with locally sourced, sustainably grown flowers.</p>
+          </div>
+
+          <div>
+            <h4 className="text-heading-sm text-white mb-4">Shop</h4>
+            <ul className="space-y-2 text-body-sm">
+              <li><a href="#" className="hover:text-white">All Collections</a></li>
+              <li><a href="#" className="hover:text-white">Weddings</a></li>
+              <li><a href="#" className="hover:text-white">Subscriptions</a></li>
+              <li><a href="#" className="hover:text-white">Gift Cards</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-heading-sm text-white mb-4">Company</h4>
+            <ul className="space-y-2 text-body-sm">
+              <li><a href="#" className="hover:text-white">About Us</a></li>
+              <li><a href="#" className="hover:text-white">Sustainability</a></li>
+              <li><a href="#" className="hover:text-white">Careers</a></li>
+              <li><a href="#" className="hover:text-white">Press</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-heading-sm text-white mb-4">Support</h4>
+            <ul className="space-y-2 text-body-sm">
+              <li><a href="#" className="hover:text-white">Contact</a></li>
+              <li><a href="#" className="hover:text-white">FAQ</a></li>
+              <li><a href="#" className="hover:text-white">Delivery Info</a></li>
+              <li><a href="#" className="hover:text-white">Care Guide</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="border-t border-neutral-800 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-body-sm">© 2026 Triciana. All rights reserved.</p>
+          <div className="flex items-center space-x-6 text-body-sm">
+            <a href="#" className="hover:text-white">Privacy Policy</a>
+            <a href="#" className="hover:text-white">Terms of Service</a>
+            <a href="#" className="hover:text-white">Accessibility</a>
+          </div>
+        </div>
+      </Container>
+    </footer>
+  );
+}
+
+// Main App with Providers
+function App() {
+  return (
+    <AuthProvider>
+      <CartProvider>
+        <AppContent />
+        <AccessibilityControls />
+      </CartProvider>
+    </AuthProvider>
   );
 }
 
