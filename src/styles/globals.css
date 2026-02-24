@@ -1,0 +1,264 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   Custom CSS Variables for Theming
+   ============================================ */
+:root {
+  /* Colors */
+  --color-primary-50: #FDF2F5;
+  --color-primary-100: #FBE4EB;
+  --color-primary-500: #DD4A7A;
+  --color-primary-700: #A8224C;
+  
+  --color-neutral-50: #FAFAF9;
+  --color-neutral-100: #F5F5F3;
+  --color-neutral-200: #E8E8E5;
+  --color-neutral-500: #787875;
+  --color-neutral-700: #454543;
+  --color-neutral-900: #1C1C1B;
+  
+  --color-accent-100: #E4ECE4;
+  --color-accent-500: #548155;
+  --color-accent-700: #355137;
+
+  /* Typography */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+
+  /* Spacing */
+  --container-max: 1280px;
+  --container-narrow: 768px;
+
+  /* Animation */
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-in-out-quad: cubic-bezier(0.45, 0, 0.55, 1);
+  --duration-fast: 200ms;
+  --duration-normal: 400ms;
+  --duration-slow: 800ms;
+}
+
+/* ============================================
+   Base Styles
+   ============================================ */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply font-body text-neutral-700 bg-neutral-50;
+    font-family: var(--font-body);
+  }
+
+  /* Typography defaults */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-semibold text-neutral-900;
+  }
+
+  h1 { @apply text-display-lg; }
+  h2 { @apply text-display-md; }
+  h3 { @apply text-display-sm; }
+  h4 { @apply text-heading-lg; }
+  h5 { @apply text-heading-md; }
+  h6 { @apply text-heading-sm; }
+
+  p {
+    @apply text-body-md leading-relaxed;
+  }
+
+  /* Focus styles for accessibility */
+  :focus-visible {
+    @apply outline outline-2 outline-primary-500 outline-offset-2;
+  }
+
+  /* Reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ============================================
+   Component Classes
+   ============================================ */
+@layer components {
+  /* Container */
+  .container {
+    @apply w-full max-w-[var(--container-max)] mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-narrow {
+    @apply w-full max-w-[var(--container-narrow)] mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Section spacing */
+  .section {
+    @apply py-16 md:py-24 lg:py-32;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center
+           px-6 py-3 text-body-md font-medium
+           rounded-full
+           transition-all duration-300 ease-out
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply bg-primary-500 text-white
+           hover:bg-primary-700
+           active:scale-95
+           shadow-soft hover:shadow-soft-lg;
+  }
+
+  .btn-secondary {
+    @apply bg-transparent text-primary-700 border-2 border-primary-500
+           hover:bg-primary-50
+           active:scale-95;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent text-neutral-700
+           hover:bg-neutral-100
+           active:scale-95;
+  }
+
+  .btn-lg {
+    @apply px-8 py-4 text-body-lg;
+  }
+
+  .btn-sm {
+    @apply px-4 py-2 text-body-sm;
+  }
+
+  /* Links */
+  .link {
+    @apply text-primary-500 hover:text-primary-700
+           underline underline-offset-4
+           transition-colors duration-200;
+  }
+
+  /* Cards */
+  .card {
+    @apply bg-white rounded-2xl shadow-soft
+           overflow-hidden
+           transition-shadow duration-300
+           hover:shadow-soft-lg;
+  }
+
+  /* Form inputs */
+  .input {
+    @apply w-full px-4 py-3
+           bg-white border border-neutral-200 rounded-xl
+           text-neutral-900 placeholder-neutral-500
+           focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20
+           transition-all duration-200;
+  }
+
+  /* Section headings */
+  .section-heading {
+    @apply text-center mb-12 md:mb-16;
+  }
+
+  .section-heading h2 {
+    @apply mb-4;
+  }
+
+  .section-heading p {
+    @apply text-neutral-500 max-w-2xl mx-auto;
+  }
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+@layer utilities {
+  /* Text gradient */
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-500 to-primary-700;
+  }
+
+  /* Smooth scrolling container */
+  .smooth-scroll {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Animation utilities */
+  .animate-delay-100 { animation-delay: 100ms; }
+  .animate-delay-200 { animation-delay: 200ms; }
+  .animate-delay-300 { animation-delay: 300ms; }
+  .animate-delay-400 { animation-delay: 400ms; }
+  .animate-delay-500 { animation-delay: 500ms; }
+
+  /* Stagger children animations */
+  .stagger-children > * {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+
+  .stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+  .stagger-children > *:nth-child(2) { animation-delay: 100ms; }
+  .stagger-children > *:nth-child(3) { animation-delay: 200ms; }
+  .stagger-children > *:nth-child(4) { animation-delay: 300ms; }
+  .stagger-children > *:nth-child(5) { animation-delay: 400ms; }
+  .stagger-children > *:nth-child(6) { animation-delay: 500ms; }
+  .stagger-children > *:nth-child(7) { animation-delay: 600ms; }
+  .stagger-children > *:nth-child(8) { animation-delay: 700ms; }
+  .stagger-children > *:nth-child(9) { animation-delay: 800ms; }
+  .stagger-children > *:nth-child(10) { animation-delay: 900ms; }
+}
+
+/* ============================================
+   Accessibility Utilities
+   ============================================ */
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Skip link */
+.skip-link {
+  @apply sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4
+         focus:z-50 focus:px-4 focus:py-2 focus:bg-white focus:rounded-lg
+         focus:shadow-soft-lg focus:outline-none focus:ring-2 focus:ring-primary-500;
+}
