@@ -74,26 +74,39 @@ export function HeroVideo({
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-    
-    // Force mute for autoplay compatibility
-    video.muted = muted;
+
+    // Force mute and inline playback for autoplay compatibility
+    video.muted = true;
     video.playsInline = true;
     video.preload = 'auto';
     
-    // Attempt autoplay
+    // Ensure video is ready to play
+    video.load();
+
+    // Attempt autoplay with multiple tries
+    const attemptPlay = async () => {
+      try {
+        await video.play();
+        console.log('Video autoplay successful');
+      } catch (err) {
+        console.warn('Autoplay attempt prevented:', err.message);
+        // Try again on user interaction
+        document.addEventListener('click', attemptPlay, { once: true });
+        document.addEventListener('touchstart', attemptPlay, { once: true });
+        document.addEventListener('scroll', attemptPlay, { once: true });
+      }
+    };
+
     if (autoplay && !reducedMotion) {
-      video.play().catch((err) => {
-        console.warn('Autoplay prevented:', err);
-        // Browser blocked autoplay - video will play when user interacts
-      });
+      attemptPlay();
     }
-    
+
     return () => {
       if (video) {
         video.pause();
       }
     };
-  }, [autoplay, muted, reducedMotion]);
+  }, [autoplay, reducedMotion]);
   
   // Respect reduced motion preference
   useEffect(() => {

@@ -26,7 +26,7 @@ export function Hero({
   ctaSecondary = 'Book Consultation',
   
   // Media - Video
-  videoSrc = '/videos/a5d0a42e-17c8-40c3-94b1-5d65e07ad80a.mp4',
+  videoSrc = '/videos/roses_and_bees.mp4',
   videoWebmSrc = '',
   posterSrc = '/images/hero/startFrame.png',
   
@@ -223,24 +223,26 @@ export function Hero({
             </Button>
           </div>
           
-          {/* Scroll indicator */}
+          {/* Scroll indicator - positioned within content layer to avoid overlap */}
           {!reducedMotion && (
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-              <svg
-                className="w-6 h-6 text-white/60"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                />
-              </svg>
-              <span className="sr-only">Scroll down</span>
+            <div className="mt-12 flex justify-center">
+              <div className="flex flex-col items-center gap-2 animate-bounce">
+                <span className="text-body-sm text-white/70 font-medium">Scroll to explore</span>
+                <svg
+                  className="w-6 h-6 text-white/60"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                  />
+                </svg>
+              </div>
             </div>
           )}
         </div>

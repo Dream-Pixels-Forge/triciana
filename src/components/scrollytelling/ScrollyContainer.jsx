@@ -122,7 +122,7 @@ export function ScrollyContainer({
         <>
           {/* Background track */}
           <div
-            className="fixed top-0 left-0 right-0 h-1.5 bg-neutral-100 z-50"
+            className="fixed top-0 left-0 right-0 h-1.5 bg-neutral-100 z-[60]"
             role="progressbar"
             aria-valuenow={scrollProgress}
             aria-valuemin={0}
@@ -141,7 +141,7 @@ export function ScrollyContainer({
           </div>
 
           {/* Progress percentage */}
-          <div className="fixed top-3 right-4 z-50 text-xs font-mono text-neutral-500 bg-white/80 backdrop-blur px-2 py-1 rounded-full shadow-sm">
+          <div className="fixed top-3 right-4 z-[60] text-xs font-mono text-neutral-500 bg-white/80 backdrop-blur px-3 py-1.5 rounded-full shadow-sm border border-neutral-200">
             {scrollProgress}%
           </div>
         </>
@@ -150,7 +150,7 @@ export function ScrollyContainer({
       {/* Section Navigation Dots */}
       {showSectionDots && !reducedMotion && totalSections > 1 && (
         <nav 
-          className="fixed right-4 lg:right-6 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-3 lg:gap-4"
+          className="fixed right-4 lg:right-6 top-1/2 -translate-y-1/2 z-[60] flex flex-col gap-3 lg:gap-4"
           aria-label="Section navigation"
         >
           {Array.from({ length: totalSections }).map((_, index) => (
@@ -199,7 +199,7 @@ export function ScrollyContainer({
       {!reducedMotion && scrollProgress > 10 && (
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-6 left-6 z-40 p-3 bg-white/90 backdrop-blur rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary-500"
+          className="fixed bottom-6 left-6 z-[60] p-3 bg-white/90 backdrop-blur rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary-500"
           aria-label="Scroll to top"
         >
           <ArrowDownIcon className="w-5 h-5 rotate-180 text-neutral-600" />
