@@ -5,6 +5,7 @@ import { ScrollySection } from './ScrollySection';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { Button } from '../common';
 import { ArrowRightIcon } from '../common/Icons';
+import { getRandomImages, PRODUCT_IMAGES } from '../../utils/images';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -28,7 +29,7 @@ export function CollectionsCarousel({
       name: 'Weddings',
       description: 'Elegant arrangements for your special day',
       longDescription: 'From intimate ceremonies to grand celebrations, our wedding collections capture the essence of your love story with bespoke floral designs.',
-      image: '/images/hero/startFrame.png',
+      image: PRODUCT_IMAGES[0],
       gradient: 'from-rose-400 via-pink-500 to-fuchsia-600',
       accentColor: '#E11D48',
       features: ['Bridal Bouquets', 'Centerpieces', 'Ceremony Arches', 'Corsages'],
@@ -38,7 +39,7 @@ export function CollectionsCarousel({
       name: 'Special Occasions',
       description: 'Celebrate life\'s memorable moments',
       longDescription: 'Birthdays, anniversaries, graduations - mark every milestone with stunning arrangements that express your deepest emotions.',
-      image: '/images/hero/endFrame.png',
+      image: PRODUCT_IMAGES[1],
       gradient: 'from-violet-400 via-purple-500 to-fuchsia-600',
       accentColor: '#A855F7',
       features: ['Birthday Bouquets', 'Anniversary Arrangements', 'Graduation Flowers', 'Custom Designs'],
@@ -48,7 +49,7 @@ export function CollectionsCarousel({
       name: 'Everyday Beauty',
       description: 'Fresh flowers for your home',
       longDescription: 'Bring joy into your daily life with our curated selection of seasonal blooms, delivered fresh to your doorstep.',
-      image: '/images/hero/startFrame.png',
+      image: PRODUCT_IMAGES[2],
       gradient: 'from-emerald-400 via-green-500 to-teal-600',
       accentColor: '#10B981',
       features: ['Weekly Subscriptions', 'Seasonal Mixes', 'Dried Arrangements', 'Plant Care'],
@@ -58,7 +59,7 @@ export function CollectionsCarousel({
       name: 'Sympathy',
       description: 'Thoughtful expressions of care',
       longDescription: 'During difficult times, let flowers convey your condolences and support with compassionate, tasteful arrangements.',
-      image: '/images/hero/endFrame.png',
+      image: PRODUCT_IMAGES[3],
       gradient: 'from-slate-400 via-blue-500 to-indigo-600',
       accentColor: '#64748B',
       features: ['Sympathy Wreaths', 'Memorial Arrangements', 'Funeral Sprays', 'Plant Gifts'],
@@ -68,7 +69,7 @@ export function CollectionsCarousel({
       name: 'Corporate',
       description: 'Professional arrangements for offices',
       longDescription: 'Elevate your workspace with sophisticated floral designs that impress clients and inspire your team.',
-      image: '/images/hero/startFrame.png',
+      image: PRODUCT_IMAGES[4],
       gradient: 'from-amber-400 via-orange-500 to-red-600',
       accentColor: '#F59E0B',
       features: ['Office Arrangements', 'Event Styling', 'Monthly Service', 'Branded Designs'],
@@ -78,7 +79,7 @@ export function CollectionsCarousel({
       name: 'Subscriptions',
       description: 'Regular deliveries of seasonal blooms',
       longDescription: 'Never be without fresh flowers. Our subscription service ensures beauty arrives at your door like clockwork.',
-      image: '/images/hero/endFrame.png',
+      image: PRODUCT_IMAGES[5],
       gradient: 'from-pink-400 via-rose-500 to-red-600',
       accentColor: '#EC4899',
       features: ['Weekly Delivery', 'Bi-Weekly Options', 'Monthly Bouquets', 'Flexible Plans'],

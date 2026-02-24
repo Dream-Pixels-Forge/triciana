@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { ScrollySection } from './ScrollySection';
 import { StarIcon } from '../common/Icons';
+import { getRandomImages, PRODUCT_IMAGES } from '../../utils/images';
 
 /**
  * TestimonialCard Component
@@ -107,42 +108,47 @@ export function TestimonialsSection({
   title = 'Testimonials',
   subtitle = 'What Our Customers Say',
   description = 'Don\'t just take our word for it. Here\'s what our customers have to say about their experiences with Triciana.',
-  testimonials = [
-    {
-      id: 1,
-      quote: "The most beautiful flowers I've ever received. The arrangement lasted over two weeks and smelled incredible!",
-      author: 'Sarah M.',
-      role: 'Wedding Client',
-      rating: 5,
-      image: '/images/hero/startFrame.png',
-    },
-    {
-      id: 2,
-      quote: "Triciana made our wedding absolutely magical. Every arrangement was more beautiful than we imagined.",
-      author: 'Emily & James',
-      role: 'Newlyweds',
-      rating: 5,
-      image: '/images/hero/endFrame.png',
-    },
-    {
-      id: 3,
-      quote: "Same-day delivery saved me on our anniversary. The bouquet was stunning and my wife was thrilled!",
-      author: 'Michael R.',
-      role: 'Regular Customer',
-      rating: 5,
-      image: '/images/hero/startFrame.png',
-    },
-    {
-      id: 4,
-      quote: "I love their commitment to sustainability. Beautiful flowers without the environmental guilt.",
-      author: 'Lisa K.',
-      role: 'Subscription Member',
-      rating: 5,
-      image: '/images/hero/endFrame.png',
-    },
-  ],
+  testimonials,
   className = '',
 }) {
+  // Generate random testimonials with random images on mount
+  const [testimonialData] = useState(() => {
+    const randomImages = getRandomImages(PRODUCT_IMAGES, 4);
+    return testimonials || [
+      {
+        id: 1,
+        quote: "The most beautiful flowers I've ever received. The arrangement lasted over two weeks and smelled incredible!",
+        author: 'Sarah M.',
+        role: 'Wedding Client',
+        rating: 5,
+        image: randomImages[0],
+      },
+      {
+        id: 2,
+        quote: "Triciana made our wedding absolutely magical. Every arrangement was more beautiful than we imagined.",
+        author: 'Emily & James',
+        role: 'Newlyweds',
+        rating: 5,
+        image: randomImages[1],
+      },
+      {
+        id: 3,
+        quote: "Same-day delivery saved me on our anniversary. The bouquet was stunning and my wife was thrilled!",
+        author: 'Michael R.',
+        role: 'Regular Customer',
+        rating: 5,
+        image: randomImages[2],
+      },
+      {
+        id: 4,
+        quote: "I love their commitment to sustainability. Beautiful flowers without the environmental guilt.",
+        author: 'Lisa K.',
+        role: 'Subscription Member',
+        rating: 5,
+        image: randomImages[3],
+      },
+    ];
+  });
   const sectionRef = useRef(null);
   const [visibleCards, setVisibleCards] = React.useState(0);
 
@@ -156,7 +162,7 @@ export function TestimonialsSection({
         start: 'top 70%',
         onUpdate: (self) => {
           const progress = self.progress;
-          const total = testimonials.length;
+          const total = testimonialData.length;
           const visible = Math.min(
             Math.ceil(progress * total * 1.3),
             total
@@ -167,7 +173,7 @@ export function TestimonialsSection({
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [testimonials.length]);
+  }, [testimonialData.length]);
 
   return (
     <ScrollySection
@@ -205,7 +211,7 @@ export function TestimonialsSection({
 
       {/* Testimonials Grid */}
       <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
-        {testimonials.map((testimonial, index) => (
+        {testimonialData.map((testimonial, index) => (
           <TestimonialCard
             key={testimonial.id}
             testimonial={testimonial}

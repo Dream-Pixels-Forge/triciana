@@ -4,6 +4,7 @@ import { Button, Container } from '../common';
 import { HeroVideo } from './HeroVideo';
 import { JpgSequencePlayer } from './JpgSequencePlayer';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
+import { getRandomHeroImage, HERO_IMAGES } from '../../utils/images';
 
 /**
  * Hero Component
@@ -28,7 +29,7 @@ export function Hero({
   // Media - Video
   videoSrc = '/videos/roses_and_bees.mp4',
   videoWebmSrc = '',
-  posterSrc = '/images/hero/startFrame.png',
+  posterSrc, // Will default to random hero image if not provided
   
   // Media - JPG Sequence
   useJpgSequence = false,
@@ -43,6 +44,9 @@ export function Hero({
 }) {
   const reducedMotion = useReducedMotion();
   
+  // Get random poster image on mount
+  const [randomPoster] = useState(() => posterSrc || getRandomHeroImage());
+
   // Refs
   const containerRef = useRef(null);
   const headlineRef = useRef(null);
@@ -142,7 +146,7 @@ export function Hero({
             fps={jpgFps}
             autoplay={!reducedMotion}
             loop={true}
-            poster={posterSrc}
+            poster={randomPoster}
             onLoaded={handleMediaLoaded}
             className="bg-neutral-100"
           />
@@ -150,7 +154,7 @@ export function Hero({
           <HeroVideo
             src={videoSrc}
             webmSrc={videoWebmSrc}
-            poster={posterSrc}
+            poster={randomPoster}
             autoplay={!reducedMotion}
             loop={true}
             muted={true}
