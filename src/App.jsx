@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Container, Section } from './components/common';
 import AccessibilityControls from './components/common/AccessibilityControls';
 import { Hero } from './components/hero';
+import { FlowerIcon, LeafIcon, HandIcon, TruckIcon, StarIcon, RecycleIcon, GlobeIcon } from './components/common/Icons';
 import {
   ScrollyContainer,
   BrandStory,
@@ -33,7 +34,7 @@ function App() {
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo */}
             <a href="/" className="flex items-center space-x-2">
-              <span className="text-2xl" aria-hidden="true">🌸</span>
+              <FlowerIcon className="w-8 h-8 text-primary-500" />
               <span className="font-display font-semibold text-xl text-neutral-900">
                 Dream Blooms
               </span>
@@ -115,10 +116,10 @@ function App() {
             title="Our Impact"
             subtitle="Sustainability at Every Step"
             metrics={[
-              { value: 95, suffix: '%', label: 'Locally Sourced', description: 'Flowers from local growers', icon: '🌱' },
-              { value: 100, suffix: '%', label: 'Foam-Free', description: 'No floral foam in arrangements', icon: '♻️' },
-              { value: 50, suffix: 'K', label: 'Plastic Saved', description: 'Packages delivered plastic-free', icon: '🌍' },
-              { value: 24, suffix: 'h', label: 'Carbon Neutral', description: 'Same-day delivery radius', icon: '🚚' },
+              { value: 95, suffix: '%', label: 'Locally Sourced', description: 'Flowers from local growers', icon: LeafIcon },
+              { value: 100, suffix: '%', label: 'Foam-Free', description: 'No floral foam in arrangements', icon: RecycleIcon },
+              { value: 50, suffix: 'K', label: 'Plastic Saved', description: 'Packages delivered plastic-free', icon: GlobeIcon },
+              { value: 24, suffix: 'h', label: 'Carbon Neutral', description: 'Same-day delivery radius', icon: TruckIcon },
             ]}
           />
           
@@ -146,8 +147,8 @@ function App() {
             <div className="grid md:grid-cols-3 gap-8">
               {/* Feature 1 */}
               <div className="card p-6 text-center">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary-100 flex items-center justify-center">
-                  <span className="text-3xl" aria-hidden="true">🌿</span>
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary-100 flex items-center justify-center text-primary-600">
+                  <LeafIcon className="w-8 h-8" />
                 </div>
                 <h3 className="text-heading-md mb-2">Locally Sourced</h3>
                 <p className="text-body-sm text-neutral-600">
@@ -157,8 +158,8 @@ function App() {
 
               {/* Feature 2 */}
               <div className="card p-6 text-center">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary-100 flex items-center justify-center">
-                  <span className="text-3xl" aria-hidden="true">✋</span>
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary-100 flex items-center justify-center text-primary-600">
+                  <HandIcon className="w-8 h-8" />
                 </div>
                 <h3 className="text-heading-md mb-2">Handcrafted</h3>
                 <p className="text-body-sm text-neutral-600">
@@ -168,8 +169,8 @@ function App() {
 
               {/* Feature 3 */}
               <div className="card p-6 text-center">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary-100 flex items-center justify-center">
-                  <span className="text-3xl" aria-hidden="true">🚚</span>
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary-100 flex items-center justify-center text-primary-600">
+                  <TruckIcon className="w-8 h-8" />
                 </div>
                 <h3 className="text-heading-md mb-2">Same-Day Delivery</h3>
                 <p className="text-body-sm text-neutral-600">
@@ -216,7 +217,7 @@ function App() {
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center space-x-2 mb-4">
-                <span className="text-2xl" aria-hidden="true">🌸</span>
+                <FlowerIcon className="w-8 h-8 text-primary-400" />
                 <span className="font-display font-semibold text-xl text-white">
                   Dream Blooms
                 </span>

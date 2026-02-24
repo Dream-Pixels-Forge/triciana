@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollySection } from './ScrollySection';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
+import { LeafIcon, RecycleIcon, GlobeIcon, TruckIcon } from '../common/Icons';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -69,28 +70,28 @@ export function SustainabilityMetrics({
       suffix: '%',
       label: 'Locally Sourced',
       description: 'Flowers from local growers',
-      icon: '🌱',
+      icon: LeafIcon,
     },
     {
       value: 100,
       suffix: '%',
       label: 'Foam-Free',
       description: 'No floral foam in arrangements',
-      icon: '♻️',
+      icon: RecycleIcon,
     },
     {
       value: 50,
       suffix: 'K',
       label: 'Plastic Saved',
       description: 'Packages delivered plastic-free',
-      icon: '🌍',
+      icon: GlobeIcon,
     },
     {
       value: 24,
       suffix: 'h',
       label: 'Carbon Neutral',
       description: 'Same-day delivery radius',
-      icon: '🚚',
+      icon: TruckIcon,
     },
   ],
   ctaText = 'Learn About Our Sustainability',
@@ -139,7 +140,9 @@ export function SustainabilityMetrics({
             className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 text-center hover:bg-white/10 transition-colors duration-300"
           >
             {/* Icon */}
-            <div className="text-5xl mb-4">{metric.icon}</div>
+            <div className="text-primary-300 mb-4 flex justify-center">
+              <metric.icon className="w-12 h-12" />
+            </div>
 
             {/* Counter */}
             <div className="text-display-sm md:text-display-md font-bold text-white mb-2">
